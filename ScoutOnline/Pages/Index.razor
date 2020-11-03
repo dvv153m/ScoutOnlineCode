@@ -2,15 +2,14 @@
 @using System.Drawing
 @using BlazorLeaflet.Models
 @inject IJSRuntime jsRuntime
+@inject ScoutOnline.Core.Map.MapsService MapService
 
 <label style="margin-left:20px">Карта:</label>
 <select name="example" @onchange="ChangeMap">
-    <option value="OpenStreetMap">OpenStreetMap(OSM)</option>
-    <option value="Yandex">Yandex</option>
-    <option value="YandexSatellite">Yandex Спутник</option>
-    <option value="Google">Google</option>
-    <option value="GoogleHybrid">Google Гибрид</option>
-    <option value="GoogleSatellite">Google Спутник</option>
+    @foreach (var map in MapService.Maps)
+    {
+        <option value="@map.Key">@map.Value.Title</option>
+    }    
 </select>
 <div id="mapContainer" style="margin-top:10px; width: 100%; height: 90vh;">
     <LeafletMap Map="_map" />
@@ -26,68 +25,21 @@
 
     private void ChangeMap(ChangeEventArgs arg)
     {
-        var mapType = arg.Value.ToString();
+        var mapType = arg.Value.ToString();        
+
+        var map = MapService.Maps.Where(m => m.Key.ToString() == mapType).FirstOrDefault();
+
         _map.RemoveLayer(CurrentLayer);
 
-        if (mapType == "OpenStreetMap")
+        CurrentLayer = new TileLayer
         {
-            CurrentLayer = new TileLayer
-            {
-                UrlTemplate = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                Attribution = "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors"
-            };
-        }
-        else if (mapType == "Yandex")
-        {
-            CurrentLayer = new TileLayer
-            {
-                UrlTemplate = "https://vec{s}.maps.yandex.net/tiles?l=map&v=17.03.30-0&z={z}&x={x}&y={y}&scale=2",
-                Attribution = "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
-                Subdomains = new string[] { "01", "02", "03", "04" }
-            };
-        }        
-        else if (mapType == "YandexSatellite")
-        {
-            CurrentLayer = new TileLayer
-            {
-                UrlTemplate = "https://sat{s}.maps.yandex.net/tiles?l=sat&v=3.307.0&x={x}&y={y}&z={z}",
-                Attribution = "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
-                Subdomains = new string[] { "01", "02", "03", "04" }
-            };
-        }
-        else if (mapType == "Google")
-        {
-            CurrentLayer = new TileLayer
-            {
-                UrlTemplate = "https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
-                Attribution = "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
-                Subdomains = new string[] { "mt0", "mt1", "mt2", "mt3" }
-            };
-        }
-        else if (mapType == "GoogleHybrid")
-        {
-            CurrentLayer = new TileLayer
-            {
-                UrlTemplate = "https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}",
-                Attribution = "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
-                Subdomains = new string[] { "mt0", "mt1", "mt2", "mt3" }
-            };
-        }
-        else if (mapType == "GoogleSatellite")
-        {
-            CurrentLayer = new TileLayer
-            {
-                UrlTemplate = "https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
-                Attribution = "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
-                Subdomains = new string[] { "mt0", "mt1", "mt2", "mt3" }
-            };
-        }
-        else
-        {
-            return;
-        }
+            UrlTemplate = map.Value.BaseUrl,
+            Subdomains = map.Value.Subdomains,
+            MaximumZoom = map.Value.MaxZoom,
+            Attribution = map.Value.Attribution,
+        };
 
-        _map.AddLayer(CurrentLayer);
+        _map.AddLayer(CurrentLayer);        
     }
 
     protected override void OnInitialized()
@@ -98,10 +50,14 @@
             Zoom = 7.8f
         };
 
+        ScoutOnline.Core.Map.MapInfo map = MapService.Maps[Core.Map.MapType.Openstreet];
+
         CurrentLayer = new TileLayer
         {
-            UrlTemplate = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            Attribution = "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
+            UrlTemplate = map.BaseUrl,
+            Subdomains = map.Subdomains,
+            MaximumZoom = map.MaxZoom,
+            Attribution = map.Attribution           
         };
 
         _map.OnInitialized += () =>
