@@ -44,13 +44,7 @@
         var newMap = MapService.Maps[mapType];
         _mapControl.RemoveLayer(CurrentLayer);
 
-        CurrentLayer = new TileLayer
-        {
-            UrlTemplate = newMap.BaseUrl,
-            Subdomains = newMap.Subdomains,
-            MaximumZoom = newMap.MaxZoom,
-            Attribution = newMap.Attribution,
-        };
+        InitCurrentLayer(newMap);
 
         _mapControl.AddLayer(CurrentLayer);
     }
@@ -66,18 +60,23 @@
 
         ScoutOnline.Core.Map.MapInfo map = MapService.Maps[_currentMapType];
 
+        InitCurrentLayer(map);
+
+        _mapControl.OnInitialized += () =>
+        {
+            _mapControl.AddLayer(CurrentLayer);
+            _isInitMap = true;
+        };
+    }
+
+    private void InitCurrentLayer(ScoutOnline.Core.Map.MapInfo map)
+    {
         CurrentLayer = new TileLayer
         {
             UrlTemplate = map.BaseUrl,
             Subdomains = map.Subdomains,
             MaximumZoom = map.MaxZoom,
             Attribution = map.Attribution
-        };
-
-        _mapControl.OnInitialized += () =>
-        {
-            _mapControl.AddLayer(CurrentLayer);
-            _isInitMap = true;
         };
     }
 }
