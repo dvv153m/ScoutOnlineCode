@@ -37,6 +37,11 @@ window.leafletBlazor = {
             zoomReverse: tileLayer.isZoomReversed,
             detectRetina: tileLayer.detectRetina,
             // crossOrigin
+            /////////////////////////////
+            //for wikimapia
+            s4: function (data) {
+                return data.x % 4 + (data.y % 4) * 4;
+            }
         });
         addLayer(mapId, layer, tileLayer.id);
     },

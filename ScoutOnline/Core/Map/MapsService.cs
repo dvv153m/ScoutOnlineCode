@@ -31,10 +31,10 @@ namespace ScoutOnline.Core.Map
             {
                 Title = "Yandex",
                 Type = MapType.Yandex,
-                BaseUrl = "https://vec{s}.maps.yandex.net/tiles?l=map&v=17.03.30-0&z={z}&x={x}&y={y}&scale=2",
+                BaseUrl = "https://vec{s}.maps.yandex.net/tiles?l=map&v=17.03.30-0&z={z}&x={x}&y={y}&scale=2",//lang=ru_RU
                 Subdomains = new string[] { "01", "02", "03", "04" },
                 MaxZoom = 19,
-                Attribution = string.Empty
+                Attribution = @"&copy; <a href=""http://yandex.ru"" target=""_blank"">Яндекс</a>"                
             });
 
             _maps.Add(MapType.YandexSatellite, new MapInfo
@@ -44,7 +44,7 @@ namespace ScoutOnline.Core.Map
                 BaseUrl = "https://sat{s}.maps.yandex.net/tiles?l=sat&v=3.307.0&x={x}&y={y}&z={z}",
                 Subdomains = new string[] { "01", "02", "03", "04" },
                 MaxZoom = 17,
-                Attribution = string.Empty
+                Attribution = @"&copy; <a href=""http://yandex.ru"" target=""_blank"">Яндекс</a>"
             });
 
             _maps.Add(MapType.GoogleStreet, new MapInfo
@@ -53,8 +53,8 @@ namespace ScoutOnline.Core.Map
                 Type = MapType.GoogleStreet,
                 BaseUrl = "https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
                 Subdomains = new string[] { "mt0", "mt1", "mt2", "mt3" },
-                MaxZoom = 20,
-                Attribution = string.Empty
+                MaxZoom = 20,                
+                Attribution = @"&copy; <a href=""http://google.ru"" target=""_blank"">Google</a>"
             });
 
             _maps.Add(MapType.GoogleHybrid, new MapInfo
@@ -64,7 +64,7 @@ namespace ScoutOnline.Core.Map
                 BaseUrl = "https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}",
                 Subdomains = new string[] { "mt0", "mt1", "mt2", "mt3" },
                 MaxZoom = 20,
-                Attribution = string.Empty
+                Attribution = @"&copy; <a href=""http://google.ru"" target=""_blank"">Google</a>"
             });
 
             _maps.Add(MapType.GoogleSatellite, new MapInfo
@@ -74,18 +74,18 @@ namespace ScoutOnline.Core.Map
                 BaseUrl = "https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
                 Subdomains = new string[] { "mt0", "mt1", "mt2", "mt3" },
                 MaxZoom = 20,
-                Attribution = string.Empty
+                Attribution = @"&copy; <a href=""http://google.ru"" target=""_blank"">Google</a>"
             });
 
-            /*_maps.Add(MapType.Wikimapia, new MapInfo
+            _maps.Add(MapType.Wikimapia, new MapInfo
             {
                 Title = "Wikimapia",
                 Type = MapType.Wikimapia,
-                BaseUrl = "http://i{s}.wikimapia.org/?x={x}&y={y}&zoom={z}",
-                Subdomains = new string[] { "0", "1", "2", "3"},
+                BaseUrl = "http://{s}{s4}.wikimapia.org/?x={x}&y={y}&zoom={z}",
+                Subdomains = new string[] { "i" },
                 MaxZoom = 20,
-                Attribution = string.Empty
-            });*/
+                Attribution = @"&copy; <a href=""http://wikimapia.org"" target=""_blank"">Wikimapia.org</a>"                
+            });
         }       
     }
 }
