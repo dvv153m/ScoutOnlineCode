@@ -5,64 +5,79 @@
 @inject ScoutOnline.Core.Map.MapsService MapService
 
 <label style="margin-left:20px">Карта:</label>
-<select name="example" @onchange="ChangeMap">
+<select @bind="CurrentMapType">
     @foreach (var map in MapService.Maps)
     {
         <option value="@map.Key">@map.Value.Title</option>
     }    
 </select>
 <div id="mapContainer" style="margin-top:10px; width: 100%; height: 90vh;">
-    <LeafletMap Map="_map" />
+    <LeafletMap Map="_mapControl" />
 </div>
 
 @code{
 
-    private Map _map;
+    private Map _mapControl;
 
-    private LatLng _startAt = new LatLng(59.948080f, 30.326621f);
+    private LatLng _mapCenterPosition = new LatLng(59.948080f, 30.326621f);
 
     private TileLayer CurrentLayer;
 
-    private void ChangeMap(ChangeEventArgs arg)
+    private bool _isInitMap = false;
+
+    private ScoutOnline.Core.Map.MapType _currentMapType = Core.Map.MapType.Openstreet;
+    public ScoutOnline.Core.Map.MapType CurrentMapType
     {
-        var mapType = arg.Value.ToString();        
+        get { return _currentMapType; }
+        set
+        {
+            if (_isInitMap)
+            {
+                _currentMapType = value;
+                OnMapChange(_currentMapType);
+            }
+        }
+    }
 
-        var map = MapService.Maps.Where(m => m.Key.ToString() == mapType).FirstOrDefault();
-
-        _map.RemoveLayer(CurrentLayer);
+    private void OnMapChange(ScoutOnline.Core.Map.MapType mapType)
+    {
+        var newMap = MapService.Maps[mapType];
+        _mapControl.RemoveLayer(CurrentLayer);
 
         CurrentLayer = new TileLayer
         {
-            UrlTemplate = map.Value.BaseUrl,
-            Subdomains = map.Value.Subdomains,
-            MaximumZoom = map.Value.MaxZoom,
-            Attribution = map.Value.Attribution,
+            UrlTemplate = newMap.BaseUrl,
+            Subdomains = newMap.Subdomains,
+            MaximumZoom = newMap.MaxZoom,
+            Attribution = newMap.Attribution,
         };
 
-        _map.AddLayer(CurrentLayer);        
+        _mapControl.AddLayer(CurrentLayer);
     }
 
     protected override void OnInitialized()
     {
-        _map = new Map(jsRuntime)
+        Console.WriteLine("OnInitialized");
+        _mapControl = new Map(jsRuntime)
         {
-            Center = _startAt,
+            Center = _mapCenterPosition,
             Zoom = 7.8f
         };
 
-        ScoutOnline.Core.Map.MapInfo map = MapService.Maps[Core.Map.MapType.Openstreet];
+        ScoutOnline.Core.Map.MapInfo map = MapService.Maps[_currentMapType];
 
         CurrentLayer = new TileLayer
         {
             UrlTemplate = map.BaseUrl,
             Subdomains = map.Subdomains,
             MaximumZoom = map.MaxZoom,
-            Attribution = map.Attribution           
+            Attribution = map.Attribution
         };
 
-        _map.OnInitialized += () =>
+        _mapControl.OnInitialized += () =>
         {
-            _map.AddLayer(CurrentLayer);
+            _mapControl.AddLayer(CurrentLayer);
+            _isInitMap = true;
         };
     }
 }
