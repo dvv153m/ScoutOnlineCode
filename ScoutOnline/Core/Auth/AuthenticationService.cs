@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,44 +15,34 @@ namespace ScoutOnline.Core.Auth
         //todo из конфига получать
         private static string baseUrl = "https://api.scout-gps.ru";
 
+        public TokenResponse TokenResponse { get; private set; }
+
         public async Task Login(string username, string password)
         {
-            username = "dvv";
-            password = "Hulycar8266";
-
-            string loginUrl = baseUrl + "/api/auth/token";            
-            string postData = "grant_type=password&username=demo&password=demo&locale=ru&client_id=8b1fd704-096e-42d6-9ba5-6d98980e7cd1&client_secret=scout-online";
-            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(loginUrl);
-            request.Method = "POST";
-            request.Accept = "json";            
-            request.ContentType = "application/x-www-form-urlencoded;charset=UTF-8";
             try
             {
-                using (Stream dataStream = request.GetRequestStream())
-                {
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                }
+                HttpClient client = new HttpClient();
+                username = "dvv";
+                password = "Hulycar8266";
+                TokenResponse = null;
 
-                using (WebResponse response = request.GetResponse())
-                {
-                    using (Stream dataStream = response.GetResponseStream())
-                    {
-                        using (StreamReader reader = new StreamReader(dataStream))
-                        {
-                            string responseFromServer = reader.ReadToEnd();
+                string loginUrl = baseUrl + "/api/auth/token";
+                string postData = $"grant_type=password&username={username}&password={password}&locale=ru&client_id=8b1fd704-096e-42d6-9ba5-6d98980e7cd1&client_secret=scout-online";
 
-                            TokenResponse parseResponse = JsonConvert.DeserializeObject<TokenResponse>(responseFromServer);
-                            var token = parseResponse.AccessToken;
-                        }
-                    }
+                var requestMessage = new HttpRequestMessage(HttpMethod.Post, loginUrl);
+                requestMessage.Content = new StringContent(postData, Encoding.UTF8, "application/x-www-form-urlencoded");
+
+                var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var responseFromServer = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    TokenResponse = JsonConvert.DeserializeObject<TokenResponse>(responseFromServer);
                 }
             }
             catch (Exception ex)
-            {
-                return;
-            }            
+            { 
+                
+            }
         }
     }
 }

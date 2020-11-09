@@ -1,6 +1,10 @@
 ﻿@page "/"
+
 @using System.Drawing
 @using BlazorLeaflet.Models
+
+@attribute [Authorize]
+
 @inject IJSRuntime jsRuntime
 @inject ScoutOnline.Core.Map.MapsService MapService
 
@@ -9,7 +13,7 @@
     @foreach (var map in MapService.Maps)
     {
         <option value="@map.Key">@map.Value.Title</option>
-    }    
+    }
 </select>
 <div id="mapContainer" style="margin-top:10px; width: 100%; height: 90vh;">
     <LeafletMap Map="_mapControl" />
@@ -50,8 +54,7 @@
     }
 
     protected override void OnInitialized()
-    {
-        Console.WriteLine("OnInitialized");
+    {        
         _mapControl = new Map(jsRuntime)
         {
             Center = _mapCenterPosition,

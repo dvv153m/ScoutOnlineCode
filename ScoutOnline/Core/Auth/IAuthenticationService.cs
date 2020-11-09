@@ -7,6 +7,8 @@ namespace ScoutOnline.Core.Auth
 {
     public interface IAuthenticationService
     {
+        TokenResponse TokenResponse { get; }
+
         Task Login(string username, string password);
     }
 }
