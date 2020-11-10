@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using ScoutOnline.Core.Map;
 using ScoutOnline.Core.Auth;
 using ScoutOnline.Core.OnlineData;
+using Blazored.LocalStorage;
 
 namespace ScoutOnline
 {
@@ -21,7 +22,9 @@ namespace ScoutOnline
             builder.Services
                 .AddSingleton<MapsService>()
                 .AddScoped<IAuthenticationService, AuthenticationService>()          
-                .AddScoped<OnlineDataService>();
+                .AddScoped<OnlineDataService>()
+                .AddBlazoredLocalStorage();
+
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });

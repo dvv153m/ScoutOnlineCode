@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Blazored.LocalStorage;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,11 +18,17 @@ namespace ScoutOnline.Core.Auth
 
         public TokenResponse TokenResponse { get; private set; }
 
+        private ILocalStorageService _localStorageService;
+
+        public AuthenticationService(ILocalStorageService localStorageService)
+        {
+            _localStorageService = localStorageService;
+        }
+
         public async Task Login(string username, string password)
         {
             try
-            {
-                HttpClient client = new HttpClient();
+            {             
                 username = "dvv";
                 password = "Hulycar8266";
                 TokenResponse = null;
@@ -32,11 +39,15 @@ namespace ScoutOnline.Core.Auth
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, loginUrl);
                 requestMessage.Content = new StringContent(postData, Encoding.UTF8, "application/x-www-form-urlencoded");
 
-                var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
-                if (response.StatusCode == HttpStatusCode.OK)
+                using (var client = new HttpClient())
                 {
-                    var responseFromServer = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    TokenResponse = JsonConvert.DeserializeObject<TokenResponse>(responseFromServer);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var responseFromServer = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        TokenResponse = JsonConvert.DeserializeObject<TokenResponse>(responseFromServer);
+                        await _localStorageService.SetItemAsync<TokenResponse>("tokenResponse", TokenResponse);
+                    }
                 }
             }
             catch (Exception ex)

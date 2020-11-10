@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Blazored.LocalStorage;
+using Newtonsoft.Json;
 using Scout.Utils.Paging;
 using ScoutOnline.Core.Auth;
 using System;
@@ -21,19 +22,23 @@ namespace ScoutOnline.Core.OnlineData
     {
         //todo из конфига получать
         private static string baseUrl = "https://api.scout-gps.ru";
-        private string _token = string.Empty;
+        //private string _token = string.Empty;
+        private ILocalStorageService _localStorageService;
 
-        public OnlineDataService(IAuthenticationService authenticationService)
+        public OnlineDataService(IAuthenticationService authenticationService,
+                                 ILocalStorageService localStorageService)
         {
-            _token = authenticationService.TokenResponse?.AccessToken;
+            _localStorageService = localStorageService;
+            //_token = authenticationService.TokenResponse?.AccessToken;
         }
 
 
         public async Task<IEnumerable<OnlineDataResponse>> GetOnlineData()
         {
+            var tokenResponse = await _localStorageService.GetItemAsync<TokenResponse>("tokenResponse");
             string positionUrl = $"{baseUrl}/api/onlinedata/getOnlineData";
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, positionUrl);
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
 
             string postData = @"{""skip"": 0, ""take"": 10, ""filter"": 1, ""orderDescending"": false}";
 
