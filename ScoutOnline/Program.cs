@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ScoutOnline.Core.Map;
 using ScoutOnline.Core.Auth;
+using ScoutOnline.Core.OnlineData;
 
 namespace ScoutOnline
 {
@@ -19,7 +20,8 @@ namespace ScoutOnline
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.Services
                 .AddSingleton<MapsService>()
-                .AddScoped<IAuthenticationService, AuthenticationService>();               
+                .AddScoped<IAuthenticationService, AuthenticationService>()          
+                .AddScoped<OnlineDataService>();
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
