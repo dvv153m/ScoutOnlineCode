@@ -21,19 +21,30 @@ namespace ScoutOnline.Core.OnlineData
     public class OnlineDataService : IOnlineDataService
     {
         //todo из конфига получать
-        private static string baseUrl = "https://api.scout-gps.ru";
-        //private string _token = string.Empty;
+        private static string baseUrl = "https://api.scout-gps.ru";        
         private ILocalStorageService _localStorageService;
+        private IAuthenticationService _authenticationService;
 
         public OnlineDataService(IAuthenticationService authenticationService,
                                  ILocalStorageService localStorageService)
         {
             _localStorageService = localStorageService;
-            //_token = authenticationService.TokenResponse?.AccessToken;
+            _authenticationService = authenticationService;            
         }
 
-
         public async Task<IEnumerable<OnlineDataResponse>> GetOnlineData()
+        {
+            var units = await GetOnlineData2();
+            if (units == null)
+            {
+                await _authenticationService.RefreshTokensAsync();
+                units = await GetOnlineData2();
+            }
+
+            return units;
+        }
+
+        public async Task<IEnumerable<OnlineDataResponse>> GetOnlineData2()
         {
             var tokenResponse = await _localStorageService.GetItemAsync<TokenResponse>("tokenResponse");
             string positionUrl = $"{baseUrl}/api/onlinedata/getOnlineData";
@@ -51,17 +62,7 @@ namespace ScoutOnline.Core.OnlineData
                 {
                     var responseFromServer = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var unitsOnlineData = JsonConvert.DeserializeObject<Page<OnlineDataResponse>>(responseFromServer);
-                    return unitsOnlineData.Data;
-                    /*foreach (var data in p1.Data)
-                    {
-                        var vvv = data.OnlineData;
-                    }*/
-                    /*var data = parseResponse["data"][0];
-                    var unit = data["unit"];
-                    var onlineData = data["onlineData"];
-
-                    var unitId = unit["id"];
-                    var address = onlineData["address"];*/
+                    return unitsOnlineData.Data;                    
                 }
                 else
                 {
@@ -69,5 +70,6 @@ namespace ScoutOnline.Core.OnlineData
                 }
             }
         }
+
     }
 }

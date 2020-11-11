@@ -87,7 +87,7 @@ namespace ScoutOnline.Core.Auth
             return _accessToken;
         }
 
-        private async Task<bool> RefreshTokensAsync()
+        public async Task<bool> RefreshTokensAsync()
         {
             try
             {
@@ -107,20 +107,19 @@ namespace ScoutOnline.Core.Auth
                         _accessToken = TokenResponse.AccessToken;
                         _refreshToken = TokenResponse.RefreshToken;
                         await _localStorageService.SetItemAsync<TokenResponse>("tokenResponse", TokenResponse);
+                        return true;
                     }
                     else
                     {
                         //HttpStatusCode.BadRequest                        
                         //не верный логин и пас
                     }
-                }
-
-                return true;
+                }                
             }
             catch (Exception ex)
-            {
-                return false;
+            {                
             }
+            return false;
         }
     }
 }

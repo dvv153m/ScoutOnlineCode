@@ -10,5 +10,7 @@ namespace ScoutOnline.Core.Auth
         TokenResponse TokenResponse { get; }
 
         Task<bool> Login(string username, string password);
+
+        Task<bool> RefreshTokensAsync();
     }
 }
