@@ -2,9 +2,7 @@
 using Newtonsoft.Json;
 using Scout.Utils.Paging;
 using ScoutOnline.Core.Auth;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -34,17 +32,17 @@ namespace ScoutOnline.Core.OnlineData
 
         public async Task<IEnumerable<OnlineDataResponse>> GetOnlineData()
         {
-            var units = await GetOnlineData2();
+            var units = await GetData();
             if (units == null)
             {
                 await _authenticationService.RefreshTokensAsync();
-                units = await GetOnlineData2();
+                units = await GetData();
             }
 
             return units;
         }
 
-        public async Task<IEnumerable<OnlineDataResponse>> GetOnlineData2()
+        public async Task<IEnumerable<OnlineDataResponse>> GetData()
         {
             var tokenResponse = await _localStorageService.GetItemAsync<TokenResponse>("tokenResponse");
             string positionUrl = $"{baseUrl}/api/onlinedata/getOnlineData";
