@@ -32,17 +32,17 @@ namespace ScoutOnline.Core.OnlineData
 
         public async Task<IEnumerable<OnlineDataResponse>> GetOnlineData()
         {
-            var units = await GetData();
-            if (units == null)
+            var unitsData = await GetUnitsData();
+            if (unitsData == null)
             {
                 await _authenticationService.RefreshTokensAsync();
-                units = await GetData();
+                unitsData = await GetUnitsData();
             }
 
-            return units;
+            return unitsData;
         }
 
-        public async Task<IEnumerable<OnlineDataResponse>> GetData()
+        public async Task<IEnumerable<OnlineDataResponse>> GetUnitsData()
         {
             var tokenResponse = await _localStorageService.GetItemAsync<TokenResponse>("tokenResponse");
             string positionUrl = $"{baseUrl}/api/onlinedata/getOnlineData";
