@@ -7,6 +7,7 @@
 
 @inject IJSRuntime jsRuntime
 @inject ScoutOnline.Core.Map.MapsService MapService
+@inject UnitService UnitService
 
 <label style="margin-left:20px">Карта:</label>
 <select @bind="CurrentMapType">
@@ -53,8 +54,15 @@
         _mapControl.AddLayer(CurrentLayer);
     }
 
+    private ScopeModel[] scopesGroup;
+
+    protected override async Task OnInitializedAsync()
+    {
+        scopesGroup = await UnitService.GetScopes();
+    }
+
     protected override void OnInitialized()
-    {        
+    {
         _mapControl = new Map(jsRuntime)
         {
             Center = _mapCenterPosition,

@@ -1,6 +1,5 @@
 using System;
 using System.Net.Http;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Text;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -11,6 +10,7 @@ using ScoutOnline.Core.Map;
 using ScoutOnline.Core.Auth;
 using ScoutOnline.Core.OnlineData;
 using Blazored.LocalStorage;
+using ScoutOnline.Core.Unit;
 
 namespace ScoutOnline
 {
@@ -23,6 +23,7 @@ namespace ScoutOnline
                 .AddSingleton<MapsService>()
                 .AddScoped<IAuthenticationService, AuthenticationService>()          
                 .AddScoped<OnlineDataService>()
+                .AddScoped<UnitService>()
                 .AddBlazoredLocalStorage();
 
             builder.RootComponents.Add<App>("app");

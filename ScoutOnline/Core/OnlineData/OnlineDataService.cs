@@ -34,11 +34,11 @@ namespace ScoutOnline.Core.OnlineData
         {            
             string onlineDataUrl = $"{baseUrl}/api/onlinedata/getOnlineData";
             string requestData = @"{""skip"": 0, ""take"": 10, ""filter"": 1, ""orderDescending"": false}";
-            var unitsOnlineData = await Get<Page<OnlineDataResponse>>(onlineDataUrl, requestData);
+            var unitsOnlineData = await Post<Page<OnlineDataResponse>>(onlineDataUrl, requestData);
             return unitsOnlineData.Data;
         }
 
-        private async Task<T> Get<T>(string requestUrl, string requestData, bool refreshToken = true)
+        private async Task<T> Post<T>(string requestUrl, string requestData, bool refreshToken = true)
         {
             var tokenResponse = await _localStorageService.GetItemAsync<TokenResponse>("tokenResponse");
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, requestUrl);
@@ -57,7 +57,7 @@ namespace ScoutOnline.Core.OnlineData
                 else if(response.StatusCode == HttpStatusCode.Unauthorized && refreshToken)
                 {
                     await _authenticationService.RefreshTokensAsync();
-                    return await Get<T>(requestUrl, requestData, false);
+                    return await Post<T>(requestUrl, requestData, false);
                 }
             }
             return default(T);
