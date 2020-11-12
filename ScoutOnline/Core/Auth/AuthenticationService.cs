@@ -1,6 +1,5 @@
 ﻿using Blazored.LocalStorage;
 using Newtonsoft.Json;
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -27,95 +26,50 @@ namespace ScoutOnline.Core.Auth
 
         public async Task<bool> Login(string username, string password)
         {
-            try
-            {             
-                username = "dvv";
-                password = "Hulycar8266";
-                TokenResponse = null;
+            username = "dvv";
+            password = "Hulycar8266";
+            string requestData = $"grant_type=password&username={username}&password={password}&locale=ru&client_id=8b1fd704-096e-42d6-9ba5-6d98980e7cd1&client_secret=scout-online";
 
-                string loginUrl = baseUrl + "/api/auth/token";
-                string postData = $"grant_type=password&username={username}&password={password}&locale=ru&client_id=8b1fd704-096e-42d6-9ba5-6d98980e7cd1&client_secret=scout-online";
-
-                var requestMessage = new HttpRequestMessage(HttpMethod.Post, loginUrl);
-                requestMessage.Content = new StringContent(postData, Encoding.UTF8, "application/x-www-form-urlencoded");
-
-                using (var client = new HttpClient())
-                {
-                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
-                    if (response.StatusCode == HttpStatusCode.OK)
-                    {
-                        var responseFromServer = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                        TokenResponse = JsonConvert.DeserializeObject<TokenResponse>(responseFromServer);
-                        _accessToken = TokenResponse.AccessToken;
-                        _refreshToken = TokenResponse.RefreshToken;
-                        await _localStorageService.SetItemAsync<TokenResponse>("tokenResponse", TokenResponse);
-                        return true;
-                    }                    
-                }
-            }
-            catch (Exception ex)
-            { 
-                
-            }
-            return false;
-        }
-
-        public async Task<string> GetTokenAsync(string username, string password, bool refresh)
-        {            
-            if (_accessToken != null)
-            {
-                // token out of date 
-                if (!refresh) return _accessToken;
-
-                // gets the new token
-                if (await RefreshTokensAsync())
-                {
-                    // if refreshed - return token
-                    return _accessToken;
-                }
-            }
-
-            if (await Login(username, password) == false)
-            {
-                return null;
-            }
-
-            return _accessToken;
-        }
+            return await RequestAuth(requestData);            
+        }        
 
         public async Task<bool> RefreshTokensAsync()
         {
-            try
+            string requestData = $"grant_type=refresh_token&refresh_token={_refreshToken}&client_id=scout-online&client_secret=scout-online";
+            return await RequestAuth(requestData);            
+        }
+
+        private async Task<bool> RequestAuth(string requestData)
+        {
+            string loginUrl = $"{baseUrl}/api/auth/token";
+            TokenResponse = await Get<TokenResponse>(loginUrl, requestData);
+            if (TokenResponse != default(TokenResponse))
             {
-                using (var client = new HttpClient())
-                {
-                    string loginUrl = baseUrl + "/api/auth/token";
-                    string postData = $"grant_type=refresh_token&refresh_token={_refreshToken}&client_id=scout-online&client_secret=scout-online";
-
-                    var requestMessage = new HttpRequestMessage(HttpMethod.Post, loginUrl);
-                    requestMessage.Content = new StringContent(postData, Encoding.UTF8, "application/x-www-form-urlencoded");
-
-                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
-                    if (response.StatusCode == HttpStatusCode.OK)
-                    {
-                        var responseFromServer = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                        TokenResponse = JsonConvert.DeserializeObject<TokenResponse>(responseFromServer);
-                        _accessToken = TokenResponse.AccessToken;
-                        _refreshToken = TokenResponse.RefreshToken;
-                        await _localStorageService.SetItemAsync<TokenResponse>("tokenResponse", TokenResponse);
-                        return true;
-                    }
-                    else
-                    {
-                        //HttpStatusCode.BadRequest                        
-                        //не верный логин и пас
-                    }
-                }                
-            }
-            catch (Exception ex)
-            {                
+                _accessToken = TokenResponse.AccessToken;
+                _refreshToken = TokenResponse.RefreshToken;
+                await _localStorageService.SetItemAsync<TokenResponse>("tokenResponse", TokenResponse);
+                return true;
             }
             return false;
+        }
+
+        private async Task<T> Get<T>(string requestUrl, string requestData, bool refreshToken = true)
+        {
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, requestUrl);
+            requestMessage.Content = new StringContent(requestData, Encoding.UTF8, "application/x-www-form-urlencoded");
+
+            using (var client = new HttpClient())
+            {
+                var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var responseFromServer = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var unitsOnlineData = JsonConvert.DeserializeObject<T>(responseFromServer);
+                    return unitsOnlineData;
+                }
+
+            }
+            return default(T);
         }
     }
 }
