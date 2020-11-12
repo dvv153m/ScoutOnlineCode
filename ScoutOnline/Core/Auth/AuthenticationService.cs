@@ -42,7 +42,7 @@ namespace ScoutOnline.Core.Auth
         private async Task<bool> RequestAuth(string requestData)
         {
             string loginUrl = $"{baseUrl}/api/auth/token";
-            TokenResponse = await Get<TokenResponse>(loginUrl, requestData);
+            TokenResponse = await Post<TokenResponse>(loginUrl, requestData);
             if (TokenResponse != default(TokenResponse))
             {
                 _accessToken = TokenResponse.AccessToken;
@@ -53,7 +53,7 @@ namespace ScoutOnline.Core.Auth
             return false;
         }
 
-        private async Task<T> Get<T>(string requestUrl, string requestData, bool refreshToken = true)
+        private async Task<T> Post<T>(string requestUrl, string requestData, bool refreshToken = true)
         {
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, requestUrl);
             requestMessage.Content = new StringContent(requestData, Encoding.UTF8, "application/x-www-form-urlencoded");

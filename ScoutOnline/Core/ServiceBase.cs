@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using ScoutOnline.Core.Auth;
 using System.Net;
@@ -14,11 +15,15 @@ namespace ScoutOnline.Core
         private ILocalStorageService _localStorageService;
         private IAuthenticationService _authenticationService;
 
+        protected readonly string BaseUrl;
+
         public ServiceBase(IAuthenticationService authenticationService,
-                           ILocalStorageService localStorageService)
+                           ILocalStorageService localStorageService,
+                           IConfiguration config)
         {
             _localStorageService = localStorageService;
             _authenticationService = authenticationService;
+            BaseUrl = config["BaseURI"];
         }
 
         protected async Task<T> Post<T>(string requestUrl, string requestData, bool refreshToken = true)
