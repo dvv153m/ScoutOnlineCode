@@ -31,27 +31,19 @@ namespace ScoutOnline.Core.OnlineData
         }
 
         public async Task<IEnumerable<OnlineDataResponse>> GetOnlineData()
-        {
-            var unitsData = await GetUnitsData();
-            if (unitsData == null)
-            {
-                await _authenticationService.RefreshTokensAsync();
-                unitsData = await GetUnitsData();
-            }
-
-            return unitsData;
+        {            
+            string onlineDataUrl = $"{baseUrl}/api/onlinedata/getOnlineData";
+            string requestData = @"{""skip"": 0, ""take"": 10, ""filter"": 1, ""orderDescending"": false}";
+            var unitsOnlineData = await Get<Page<OnlineDataResponse>>(onlineDataUrl, requestData);
+            return unitsOnlineData.Data;
         }
 
-        public async Task<IEnumerable<OnlineDataResponse>> GetUnitsData()
+        private async Task<T> Get<T>(string requestUrl, string requestData, bool refreshToken = true)
         {
             var tokenResponse = await _localStorageService.GetItemAsync<TokenResponse>("tokenResponse");
-            string positionUrl = $"{baseUrl}/api/onlinedata/getOnlineData";
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, positionUrl);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, requestUrl);
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
-
-            string postData = @"{""skip"": 0, ""take"": 10, ""filter"": 1, ""orderDescending"": false}";
-
-            requestMessage.Content = new StringContent(postData, Encoding.UTF8, "application/json");
+            requestMessage.Content = new StringContent(requestData, Encoding.UTF8, "application/json");
 
             using (var client = new HttpClient())
             {
@@ -59,15 +51,16 @@ namespace ScoutOnline.Core.OnlineData
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     var responseFromServer = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    var unitsOnlineData = JsonConvert.DeserializeObject<Page<OnlineDataResponse>>(responseFromServer);
-                    return unitsOnlineData.Data;                    
+                    var unitsOnlineData = JsonConvert.DeserializeObject<T>(responseFromServer);
+                    return unitsOnlineData;
                 }
-                else
+                else if(response.StatusCode == HttpStatusCode.Unauthorized && refreshToken)
                 {
-                    return null;
+                    await _authenticationService.RefreshTokensAsync();
+                    return await Get<T>(requestUrl, requestData, false);
                 }
             }
+            return default(T);
         }
-
     }
 }
