@@ -1,55 +1,57 @@
 ﻿@page "/onlinedata"
 
+@attribute [Authorize]
+
 @inject OnlineDataService OnlineDataService
 
-    <div style="margin:25px">
+<div style="margin:25px">
 
-        <h3>Текущие данные</h3>
+    <h3>Текущие данные</h3>
 
-        @if (unitsOnlineData == null)
-        {
-            <p><em>Loading...</em></p>
-        }
-        else
-        {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Дата/время</th>
-                        <th>Название объекта</th>
-                        <th>Гос. номер</th>
-                        <th>ID</th>
-                        <th>Спутники</th>
-                        <th>Скорость, км/ч</th>
-                        <th>Топливо</th>
-                        <th>Адрес</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var unit in unitsOnlineData)
-                    {
-                        <tr>
-                            <td>@unit.OnlineData.Date.Value.ToShortDateString()</td>
-                            <td>@unit.Unit.DeviceName</td>
-                            <td>@unit.Unit.GarageNumber</td>
-                            <td>@unit.Unit.Id</td>
-                            <td>@unit.OnlineData.SatellitesNumber</td>
-                            <td>@unit.OnlineData.Speed</td>
-                            <td>@unit.OnlineData.FuelLevel</td>
-                            <td>@unit.OnlineData.Address</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-    </div>
-
-    @code {
-
-        private IEnumerable<OnlineDataResponse> unitsOnlineData;
-
-        protected override async Task OnInitializedAsync()
-        {
-            unitsOnlineData = await OnlineDataService.GetOnlineData();
-        }
+    @if (unitsOnlineData == null)
+    {
+        <p><em>Loading...</em></p>
     }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Дата/время</th>
+                    <th>Название объекта</th>
+                    <th>Гос. номер</th>
+                    <th>ID</th>
+                    <th>Спутники</th>
+                    <th>Скорость, км/ч</th>
+                    <th>Топливо</th>
+                    <th>Адрес</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var unit in unitsOnlineData)
+                {
+                    <tr>
+                        <td>@unit.OnlineData.Date.Value.ToShortDateString()</td>
+                        <td>@unit.Unit.DeviceName</td>
+                        <td>@unit.Unit.GarageNumber</td>
+                        <td>@unit.Unit.Id</td>
+                        <td>@unit.OnlineData.SatellitesNumber</td>
+                        <td>@unit.OnlineData.Speed</td>
+                        <td>@unit.OnlineData.FuelLevel</td>
+                        <td>@unit.OnlineData.Address</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+
+    private IEnumerable<OnlineDataResponse> unitsOnlineData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        unitsOnlineData = await OnlineDataService.GetOnlineData();
+    }
+}

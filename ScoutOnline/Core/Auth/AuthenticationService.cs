@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http;
@@ -8,9 +9,8 @@ using System.Threading.Tasks;
 namespace ScoutOnline.Core.Auth
 {
     public class AuthenticationService : IAuthenticationService
-    {
-        //todo из конфига получать
-        private static string baseUrl = "https://api.scout-gps.ru";
+    {        
+        private readonly string BaseUrl;
 
         private string _accessToken;
         private string _refreshToken;
@@ -19,9 +19,11 @@ namespace ScoutOnline.Core.Auth
 
         private ILocalStorageService _localStorageService;
 
-        public AuthenticationService(ILocalStorageService localStorageService)
+        public AuthenticationService(ILocalStorageService localStorageService,
+                                     IConfiguration config)
         {
             _localStorageService = localStorageService;
+            BaseUrl = config["BaseURI"];
         }
 
         public async Task<bool> Login(string username, string password)
@@ -41,7 +43,7 @@ namespace ScoutOnline.Core.Auth
 
         private async Task<bool> RequestAuth(string requestData)
         {
-            string loginUrl = $"{baseUrl}/api/auth/token";
+            string loginUrl = $"{BaseUrl}/api/auth/token";
             TokenResponse = await Post<TokenResponse>(loginUrl, requestData);
             if (TokenResponse != default(TokenResponse))
             {
