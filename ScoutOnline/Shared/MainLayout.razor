@@ -1,12 +1,11 @@
 ﻿@inherits LayoutComponentBase
 @inject IAuthenticationService AuthenticationService
 
-@if (AuthenticationService.TokenResponse != null)
-{
+
     <div class="sidebar">
         <NavMenu />
     </div>
-}
+
 
 <div class="main">
     <div class="content">
