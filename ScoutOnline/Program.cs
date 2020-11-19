@@ -32,7 +32,9 @@ namespace ScoutOnline
             
                 new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) }
                 
-            );            
+            );
+
+            builder.Services.AddTelerikBlazor();
 
             //string serverlessBaseURI = builder.Configuration["BaseURI"];
             await builder.Build().RunAsync();
@@ -56,7 +58,7 @@ namespace ScoutOnline
 //1) через нугет скачиваем Telerik.UI.for.Blazor.Trial
 //2) в index.html добавляем 
 //<link rel="stylesheet" href="_content/Telerik.UI.for.Blazor.Trial/css/kendo-theme-default/all.css" />
-//< script src = "_content/Telerik.UI.for.Blazor.Trial/js/telerik-blazor.js" defer ></ script >
+//<script src = "_content/Telerik.UI.for.Blazor.Trial/js/telerik-blazor.js" defer ></ script >
 //3) в Imports.razor добавить 
 //@using Telerik.Blazor
 //@using Telerik.Blazor.Components
@@ -64,7 +66,7 @@ namespace ScoutOnline
 //@inherits LayoutComponentBase
 //<TelerikRootComponent>
 //.....
-//</TelerikRootComponent >
+//</TelerikRootComponent>
 //6) Program.cs
 //builder.Services.AddTelerikBlazor();
 ////////////////////////////////////////////////////////////////////

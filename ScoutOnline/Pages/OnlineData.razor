@@ -14,35 +14,18 @@
     }
     else
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Дата/время</th>
-                    <th>Название объекта</th>
-                    <th>Гос. номер</th>
-                    <th>ID</th>
-                    <th>Спутники</th>
-                    <th>Скорость, км/ч</th>
-                    <th>Топливо</th>
-                    <th>Адрес</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var unit in unitsOnlineData)
-                {
-                    <tr>
-                        <td>@unit.OnlineData.Date.Value.ToShortDateString()</td>
-                        <td>@unit.Unit.DeviceName</td>
-                        <td>@unit.Unit.GarageNumber</td>
-                        <td>@unit.Unit.Id</td>
-                        <td>@unit.OnlineData.SatellitesNumber</td>
-                        <td>@unit.OnlineData.Speed</td>
-                        <td>@unit.OnlineData.FuelLevel</td>
-                        <td>@unit.OnlineData.Address</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <Telerik.Blazor.Components.TelerikGrid Data="@unitsOnlineData" Height="550" FilterMode="Telerik.Blazor.GridFilterMode.FilterMenu">
+        <GridColumns>
+            <Telerik.Blazor.Components.GridColumn Field="OnlineData.Date" Title="Date"></Telerik.Blazor.Components.GridColumn>
+            <Telerik.Blazor.Components.GridColumn Field="Unit.DeviceName" Title="DeviceName"></Telerik.Blazor.Components.GridColumn>
+            <Telerik.Blazor.Components.GridColumn Field="Unit.GarageNumber" Title="GarageNumber"></Telerik.Blazor.Components.GridColumn>
+            <Telerik.Blazor.Components.GridColumn Field="Unit.Id" Title="Id"></Telerik.Blazor.Components.GridColumn>
+            <Telerik.Blazor.Components.GridColumn Field="OnlineData.SatellitesNumber" Title="SatellitesNumber"></Telerik.Blazor.Components.GridColumn>
+            <Telerik.Blazor.Components.GridColumn Field="OnlineData.Speed" Title="Speed"></Telerik.Blazor.Components.GridColumn>
+            <Telerik.Blazor.Components.GridColumn Field="OnlineData.FuelLevel" Title="FuelLevel"></Telerik.Blazor.Components.GridColumn>
+            <Telerik.Blazor.Components.GridColumn Field="OnlineData.Address" Title="Address"></Telerik.Blazor.Components.GridColumn>
+        </GridColumns>
+    </Telerik.Blazor.Components.TelerikGrid>        
     }
 </div>
 
