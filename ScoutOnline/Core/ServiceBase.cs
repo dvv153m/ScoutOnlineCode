@@ -39,6 +39,11 @@ namespace ScoutOnline.Core
         private async Task<T> Request<T>(HttpMethod httpMethod, string requestUrl, string requestData, bool refreshToken = true)
         {
             var tokenResponse = await _localStorageService.GetItemAsync<TokenResponse>("tokenResponse");
+            if (tokenResponse == null)
+            {
+                await _authenticationService.Login("1", "1");
+                tokenResponse = await _localStorageService.GetItemAsync<TokenResponse>("tokenResponse");
+            }
             var requestMessage = new HttpRequestMessage(httpMethod, requestUrl);
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
             if (requestData.Length > 0)

@@ -67,3 +67,8 @@ namespace ScoutOnline
 //</TelerikRootComponent >
 //6) Program.cs
 //builder.Services.AddTelerikBlazor();
+////////////////////////////////////////////////////////////////////
+//ScoutOnline.cproj
+//<ManifestShortName>FIRE Calculator</ManifestShortName>
+//<ManifestLongName > Blazor FIRE Calculator</ManifestLongName>
+/////////////////////////////////////////////////////////////////////////
