@@ -36,7 +36,7 @@ namespace ScoutOnline
 
             builder.Services.AddTelerikBlazor();
 
-            //string serverlessBaseURI = builder.Configuration["BaseURI"];
+            //string serverlessBaseURI = builder.Configuration["BaseURI"];//
             await builder.Build().RunAsync();
         }
     }
