@@ -75,10 +75,12 @@
 
 
             PointF[][] points = new PointF[1][];
-            points[0] = new PointF[2];
+            points[0] = new PointF[4];
             points[0][0] = new PointF(59.948080f, 30.326621f);
-            points[0][1] = new PointF(59.958080f, 30.336621f);
-            Polyline polyline = new Polyline { Shape = points, DrawStroke= true, StrokeColor=Color.Red };
+            points[0][1] = new PointF(59.948080f, 30.346621f);
+            points[0][2] = new PointF(59.938080f, 30.346621f);
+            points[0][3] = new PointF(59.938080f, 30.326621f);
+            Polygon polyline = new Polygon { Shape = points, DrawStroke= true, Fill=true, FillColor = Color.Blue };
 
             _mapControl.AddLayer(polyline);
 
