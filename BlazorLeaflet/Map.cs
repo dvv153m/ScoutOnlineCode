@@ -92,6 +92,7 @@ namespace BlazorLeaflet
         /// <exception cref="UninitializedMapException">Throws when the map has not been yet initialized.</exception>
         public void AddLayer(Layer layer)
         {
+            string id2 = layer.Id;
             if (layer is null)
             {
                 throw new ArgumentNullException(nameof(layer));

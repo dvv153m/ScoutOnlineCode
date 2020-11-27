@@ -77,7 +77,14 @@ window.leafletBlazor = {
         };
 
         if (marker.icon !== null) {
-            options.icon = createDivIcon(marker.icon);
+            if (marker.icon.html != null) {
+
+                options.icon = createDivIcon(marker.icon);
+            }
+            else {
+
+                options.icon = createIcon(marker.icon);
+            }                        
         }
         const mkr = L.marker(marker.position, options);
         connectMarkerEvents(mkr, objectReference);

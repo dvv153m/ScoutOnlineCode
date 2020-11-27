@@ -86,7 +86,7 @@
             else
             {
                 var d = _mapControl.GetLayers().Count;
-                if (d < 3)
+                if (d < 4)
                 { 
                     _mapControl.AddLayer(_polyline);
                     _mapControl.AddLayer(_marker);    
@@ -124,6 +124,12 @@
                 _marker.Icon = new Icon() { Html = "geozone name" };
                 _mapControl.AddLayer(_marker);
             }
+
+            // Create the marker
+            var marker = new Marker(59.948080f, 30.326621f);            
+            marker.Popup = new Popup { Content = "This is a nice location!" };
+            marker.Icon = new Icon { Url = "camping.png" };
+            _mapControl.AddLayer(marker);
 
             _isInitMap = true;
         };
