@@ -3,7 +3,7 @@
 
 @using System.Drawing
 @using BlazorLeaflet.Models
-
+@using ScoutOnline.Core.Geozone
 
 
 @inject IJSRuntime jsRuntime
@@ -73,23 +73,27 @@
         {
             _mapControl.AddLayer(CurrentLayer);
 
-            var gPoints = new List<PointF>()
+            var gPoints = new List<Location>()
             {
-                new PointF(59.948080f, 30.326621f),
-                new PointF(59.948080f, 30.346621f),
-                new PointF(59.938080f, 30.346621f),
-                new PointF(59.938080f, 30.326621f)
+                new Location(59.948080f, 30.326621f),
+                new Location(59.948080f, 30.346621f),
+                new Location(59.938080f, 30.346621f),
+                new Location(59.938080f, 30.326621f)
             };            
             var geozonePoints = GetGeozonePoints(gPoints);
 
             Polygon polyline = new Polygon { Shape = geozonePoints, DrawStroke= true, Fill=true, FillColor = Color.Blue };
-            
+
             _mapControl.AddLayer(polyline);
 
-            var marker = new Marker(59.948080f, 30.326621f);            
-            marker.Icon = new Icon() { Html = "geozone name 11"};
-            
-            _mapControl.AddLayer(marker);
+            var area = Area.GetOuterArea(gPoints);
+            if (area != null)
+            {
+                var center = area.Value.GetCenter();
+                var marker = new Marker((float)center.Latitude, (float)center.Longitude);
+                marker.Icon = new Icon() { Html = "geozone name 119" };
+                _mapControl.AddLayer(marker);
+            }
 
             _isInitMap = true;
         };
@@ -106,7 +110,7 @@
         };
     }
 
-    private PointF[][] GetGeozonePoints(List<PointF> gPoints)
+    private PointF[][] GetGeozonePoints(List<Location> gPoints)
     {
         PointF[][] points = new PointF[1][];
 
@@ -120,9 +124,11 @@
 
         for (int i = 0; i < gPoints.Count; i++)
         { 
-            points[0][i] = new PointF(gPoints[i].X, gPoints[i].Y);
+            points[0][i] = new PointF((float)gPoints[i].Latitude, (float)gPoints[i].Longitude);
         }
 
         return points;
     }
+
+    
 }
