@@ -19,6 +19,8 @@
 
 @code{
     private Map _mapControl;
+    Polygon _polyline;
+    Marker _marker;
 
     private LatLng _mapCenterPosition = new LatLng(59.948080f, 30.326621f);
 
@@ -62,12 +64,35 @@
         _mapControl = new Map(jsRuntime)
         {
             Center = _mapCenterPosition,
-            Zoom = 7.8f
+            Zoom = 13f
         };
 
         ScoutOnline.Core.Map.MapInfo map = MapService.Maps[_currentMapType];
 
         InitCurrentLayer(map);
+
+
+        _mapControl.OnZoom += async (q, w) =>
+        {
+            Map m = q as Map;
+            float zoom = await m.GetZoom();
+
+            if (zoom < 12)
+            {
+                //не отображаем геозоны
+                _mapControl.RemoveLayer(_polyline);
+                _mapControl.RemoveLayer(_marker);
+            }
+            else
+            {
+                var d = _mapControl.GetLayers().Count;
+                if (d < 3)
+                { 
+                    _mapControl.AddLayer(_polyline);
+                    _mapControl.AddLayer(_marker);    
+                }
+            }
+        };
 
         _mapControl.OnInitialized += () =>
         {
@@ -76,23 +101,28 @@
             var gPoints = new List<Location>()
             {
                 new Location(59.948080f, 30.326621f),
-                new Location(59.948080f, 30.346621f),
-                new Location(59.938080f, 30.346621f),
+                new Location(59.948080f, 30.349121f),
+                new Location(59.938080f, 30.349121f),
                 new Location(59.938080f, 30.326621f)
             };            
             var geozonePoints = GetGeozonePoints(gPoints);
 
-            Polygon polyline = new Polygon { Shape = geozonePoints, DrawStroke= true, Fill=true, FillColor = Color.Blue };
+            _polyline = new Polygon { Shape = geozonePoints, DrawStroke= true, Fill=true, FillColor = Color.Blue };
 
-            _mapControl.AddLayer(polyline);
+            _mapControl.AddLayer(_polyline);
+            
 
             var area = Area.GetOuterArea(gPoints);
             if (area != null)
             {
-                var center = area.Value.GetCenter();
-                var marker = new Marker((float)center.Latitude, (float)center.Longitude);
-                marker.Icon = new Icon() { Html = "geozone name 119" };
-                _mapControl.AddLayer(marker);
+                Location center = area.Value.GetCenter();
+                double newCenterLat = center.Latitude + (center.Latitude * 0.00002);
+                double newCenterLon = center.Longitude - (center.Longitude * 0.00002);
+                Console.WriteLine(newCenterLat);
+                Console.WriteLine(newCenterLon);
+                _marker = new Marker((float)newCenterLat, (float)newCenterLon);
+                _marker.Icon = new Icon() { Html = "geozone name" };
+                _mapControl.AddLayer(_marker);
             }
 
             _isInitMap = true;

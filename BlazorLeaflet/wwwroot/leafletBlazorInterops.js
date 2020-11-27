@@ -45,6 +45,7 @@ window.leafletBlazor = {
         });
         addLayer(mapId, layer, tileLayer.id);
     },
+    
     addMbTilesLayer: function (mapId, mbTilesLayer, objectReference) {
         const layer = L.tileLayer.mbTiles(mbTilesLayer.urlTemplate, {
             attribution: mbTilesLayer.attribution,
@@ -248,7 +249,7 @@ function createIcon(icon) {
 function createDivIcon(icon) {
     return L.divIcon({
         html: icon.html,
-        className: "label"//icon.className
+        className: "text-labels"//icon.className
         //iconSize: [50, 70]
     })
 }

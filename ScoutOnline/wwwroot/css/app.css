@@ -220,3 +220,11 @@ app {
         -webkit-transform: scale(1.0)
     }
 }
+
+/*text in geozone*/
+.text-labels {
+    font-size: 1em;
+    font-weight: 700;
+    color: black;
+    /* Use color, background, set margins for offset, etc */
+}
