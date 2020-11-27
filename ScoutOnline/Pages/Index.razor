@@ -73,7 +73,6 @@
         {
             _mapControl.AddLayer(CurrentLayer);
 
-
             PointF[][] points = new PointF[1][];
             points[0] = new PointF[4];
             points[0][0] = new PointF(59.948080f, 30.326621f);
@@ -81,8 +80,13 @@
             points[0][2] = new PointF(59.938080f, 30.346621f);
             points[0][3] = new PointF(59.938080f, 30.326621f);
             Polygon polyline = new Polygon { Shape = points, DrawStroke= true, Fill=true, FillColor = Color.Blue };
-
+            
             _mapControl.AddLayer(polyline);
+
+            var marker = new Marker(59.948080f, 30.326621f);            
+            marker.Icon = new Icon() { Html = "geozone name 125"};
+            
+            _mapControl.AddLayer(marker);
 
             _isInitMap = true;
         };

@@ -4,6 +4,7 @@ namespace BlazorLeaflet.Models
 {
     public class Icon
     {
+        public string Html { get; set; }
 
         /// <summary>
         /// (required) The URL to the icon image (absolute or relative to your script path).

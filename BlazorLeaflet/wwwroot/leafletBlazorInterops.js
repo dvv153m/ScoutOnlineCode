@@ -76,7 +76,7 @@ window.leafletBlazor = {
         };
 
         if (marker.icon !== null) {
-            options.icon = createIcon(marker.icon);
+            options.icon = createDivIcon(marker.icon);
         }
         const mkr = L.marker(marker.position, options);
         connectMarkerEvents(mkr, objectReference);
@@ -230,7 +230,7 @@ window.leafletBlazor = {
 };
 
 function createIcon(icon) {
-    return L.icon({
+    return L.icon({        
         iconUrl: icon.url,
         iconRetinaUrl: icon.retinaUrl,
         iconSize: icon.size ? L.point(icon.size.value.width, icon.size.value.height) : null,
@@ -242,6 +242,14 @@ function createIcon(icon) {
         shadowSize: icon.shadowSize ? L.point(icon.shadowSize.value.width, icon.shadowSize.value.height) : null,
         shadowSizeAnchor: icon.shadowSizeAnchor ? L.point(icon.shadowSizeAnchor.value.width, icon.shadowSizeAnchor.value.height) : null,
         className: icon.className
+    })
+}
+
+function createDivIcon(icon) {
+    return L.divIcon({
+        html: icon.html,
+        className: "label"//icon.className
+        //iconSize: [50, 70]
     })
 }
 
