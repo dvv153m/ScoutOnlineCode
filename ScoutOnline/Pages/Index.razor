@@ -19,7 +19,9 @@
 
 @code{
     private Map _mapControl;
-    Polygon _polyline;
+
+    //Polygon _polyline;
+    Group _geozones;    
     Marker _marker;
 
     private LatLng _mapCenterPosition = new LatLng(59.948080f, 30.326621f);
@@ -80,7 +82,8 @@
             if (zoom < 12)
             {
                 //не отображаем геозоны
-                _mapControl.RemoveLayer(_polyline);
+                //_mapControl.RemoveLayer(_polyline);
+                _mapControl.RemoveLayer(_geozones);
                 _mapControl.RemoveLayer(_marker);
             }
             else
@@ -88,7 +91,8 @@
                 var d = _mapControl.GetLayers().Count;
                 if (d < 4)
                 { 
-                    _mapControl.AddLayer(_polyline);
+                    //_mapControl.AddLayer(_polyline);
+                    _mapControl.AddLayer(_geozones);
                     _mapControl.AddLayer(_marker);    
                 }
             }
@@ -107,10 +111,11 @@
             };            
             var geozonePoints = GetGeozonePoints(gPoints);
 
-            _polyline = new Polygon { Shape = geozonePoints, DrawStroke= true, Fill=true, FillColor = Color.Blue };
+            Polygon _polyline = new Polygon { Shape = geozonePoints, DrawStroke= true, Fill=true, FillColor = Color.Blue };
 
-            _mapControl.AddLayer(_polyline);
-            
+            _geozones = new Group { Objects = new Polygon[] { _polyline } };
+            _mapControl.AddLayer(_geozones);
+            //_mapControl.AddLayer(_polyline);            
 
             var area = Area.GetOuterArea(gPoints);
             if (area != null)

@@ -43,6 +43,35 @@ namespace ScoutOnline
 }
 
 //todo
+
+//Обновление приложения
+//https://wellsb.com/csharp/aspnet/create-pwa-from-blazor-app/
+
+//https://leafletjs.com/examples/layers-control/example.html
+//все геозоны с подписями размещать в L.layerGroup
+// группы для геозон и для отображения тс
+
+//pwa with version
+//https://wellsb.com/csharp/aspnet/create-pwa-from-blazor-app/
+
+//кластеризация иконок
+//Leaflet.markercluster
+
+//создание и редактирование геозон
+//https://jsfiddle.net/user2314737/Lscupxqp/
+
+/*var aa = L.marker([48.185556, 11.620278]).bindPopup('AA'),
+bb = L.marker([48.152222, 11.592778]).bindPopup('BB'),
+cc = L.marker([48.161209, 11.597989]).bindPopup('CC'),
+dd = L.marker([48.14350, 11.58775]).bindPopup('DD'),
+ee = L.marker([48.14989, 11.59094]).bindPopup('EE'),
+ff = L.marker([48.15958, 11.60608]).bindPopup('FF');
+
+var restaurants = L.layerGroup([aa, bb]);
+var sport = L.layerGroup([cc, dd]);
+var sights = L.layerGroup([ee, ff]);*/
+
+
 //pwa каждый раз заново загружает приложение из кеша не загружается
 //добавить combobox telerik на выбор карт
 //подрефачить аутентификацию index.razor удалить model

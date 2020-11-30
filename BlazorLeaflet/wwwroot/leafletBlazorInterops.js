@@ -1,5 +1,7 @@
 ﻿maps = {};
 layers = {};
+//mapId = "";
+currentLayer = null;
 
 window.leafletBlazor = {
     create: function (map, objectReference) {
@@ -43,7 +45,36 @@ window.leafletBlazor = {
                 return data.x % 4 + (data.y % 4) * 4;
             }
         });
+        //mapId = tileLayer.id;
+        currentLayer = layer;
         addLayer(mapId, layer, tileLayer.id);
+    },
+
+    addGroup: function (mapId, group, objectReference) {
+        
+        try {
+            var layerGroup = new L.LayerGroup();
+            for (var i = 0; i < group.objects.length; i++) {
+
+                var obj = group.objects[i];
+                
+                //объект может быть любой: marker, polyline, polygon и т.д.
+                //в каждом из этих объектов добавить поле целочисленной поле type в котором содержится тип объекта(marker, polyline, polygon и т.д.)
+                //if (obj.ObjectType == ObjectType.Polygon)
+                //{
+                //    const player = L.polygon(shapeToLatLngArray(obj.shape), createPolyline(obj));
+                //}
+
+                const player = L.polygon(shapeToLatLngArray(obj.shape), createPolyline(obj));
+                layerGroup.addLayer(player);                
+            }
+
+            addLayer(mapId, layerGroup, group.id);
+        }
+        catch (e)
+        {
+            var d = 4 + 4;
+        }
     },
     
     addMbTilesLayer: function (mapId, mbTilesLayer, objectReference) {
