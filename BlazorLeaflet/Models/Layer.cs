@@ -4,8 +4,18 @@ using Microsoft.JSInterop;
 
 namespace BlazorLeaflet.Models
 {
+    public enum LayerType : byte
+    {
+        Unknown = 0,
+        Polygon = 1,
+        Marker = 2,
+        Polyline = 3
+    }
+
     public abstract class Layer
     {
+        public virtual LayerType LayerType { get;set; } = LayerType.Unknown;
+
         /// <summary>
         /// Unique identifier used by the interoperability service on the client side to identify layers.
         /// </summary>

@@ -8,6 +8,8 @@ namespace BlazorLeaflet.Models
 {
     public class Marker : InteractiveLayer
     {
+        public override LayerType LayerType { get; set; } = LayerType.Marker;
+
         /// <summary>
         /// The position of the marker on the map.
         /// </summary>

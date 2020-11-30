@@ -2,6 +2,7 @@
 layers = {};
 //mapId = "";
 currentLayer = null;
+const LayerType = Object.freeze({ "Unknown": 0, "Polygon": 1, "Marker": 2})
 
 window.leafletBlazor = {
     create: function (map, objectReference) {
@@ -13,7 +14,7 @@ window.leafletBlazor = {
             maxZoom: map.maxZoom ? map.maxZoom : undefined,
             maxBounds: map.maxBounds && map.maxBounds.item1 && map.maxBounds.item2 ? L.latLngBounds(map.maxBounds.item1, map.maxBounds.item2) : undefined,
         });
-
+        
         connectMapEvents(leafletMap, objectReference);
         maps[map.id] = leafletMap;
         layers[map.id] = [];
@@ -54,19 +55,35 @@ window.leafletBlazor = {
         
         try {
             var layerGroup = new L.LayerGroup();
-            for (var i = 0; i < group.objects.length; i++) {
 
-                var obj = group.objects[i];
-                
-                //объект может быть любой: marker, polyline, polygon и т.д.
-                //в каждом из этих объектов добавить поле целочисленной поле type в котором содержится тип объекта(marker, polyline, polygon и т.д.)
-                //if (obj.ObjectType == ObjectType.Polygon)
-                //{
-                //    const player = L.polygon(shapeToLatLngArray(obj.shape), createPolyline(obj));
-                //}
+            if (group.polygons != undefined) {
 
-                const player = L.polygon(shapeToLatLngArray(obj.shape), createPolyline(obj));
-                layerGroup.addLayer(player);                
+                for (var i = 0; i < group.polygons.length; i++) {
+                    
+                    var obj = group.polygons[i];
+                    var player = L.polygon(shapeToLatLngArray(obj.shape), createPolyline(obj));                    
+                    layerGroup.addLayer(player);
+                }
+            }
+            if (group.markers != undefined)
+            {
+                for (var i = 0; i < group.markers.length; i++) {
+
+                    var options = {};
+                    var obj = group.markers[i];  
+                    if (obj.icon !== null) {
+                        if (obj.icon.html != null) {
+
+                            options.icon = createDivIcon(obj.icon);
+                        }
+                        else {
+
+                            options.icon = createIcon(obj.icon);
+                        }
+                    }
+                    const mkr = L.marker(obj.position, options);
+                    layerGroup.addLayer(mkr);                    
+                }
             }
 
             addLayer(mapId, layerGroup, group.id);

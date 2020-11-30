@@ -4,6 +4,7 @@ namespace BlazorLeaflet.Models
 {
     public class Polyline<TShape> : Path
     {
+        public override LayerType LayerType { get; set; } = LayerType.Polyline;
 
         public TShape Shape { get; set; }
 
@@ -20,7 +21,8 @@ namespace BlazorLeaflet.Models
     }
 
     public class Polyline : Polyline<PointF[][]>
-    { }
+    {         
+    }
 
 
 }

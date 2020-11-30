@@ -6,7 +6,9 @@ namespace BlazorLeaflet.Models
 {
     public class Group : InteractiveLayer
     {
-        public Polygon[] Objects { get; set; }
-        
+        public Polygon[] Polygons { get; set; }
+
+        public Marker[] Markers { get; set; }
+
     }
 }

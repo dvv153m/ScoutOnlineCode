@@ -74,28 +74,11 @@
         InitCurrentLayer(map);
 
 
-        _mapControl.OnZoom += async (q, w) =>
+        _mapControl.OnZoom += async (map, events) =>
         {
-            Map m = q as Map;
-            float zoom = await m.GetZoom();
-
-            if (zoom < 12)
-            {
-                //не отображаем геозоны
-                //_mapControl.RemoveLayer(_polyline);
-                _mapControl.RemoveLayer(_geozones);
-                _mapControl.RemoveLayer(_marker);
-            }
-            else
-            {
-                var d = _mapControl.GetLayers().Count;
-                if (d < 4)
-                { 
-                    //_mapControl.AddLayer(_polyline);
-                    _mapControl.AddLayer(_geozones);
-                    _mapControl.AddLayer(_marker);    
-                }
-            }
+            Map currentMap = map as Map;
+            float zoom = await currentMap.GetZoom();            
+            GeozoneVisibility(zoom);
         };
 
         _mapControl.OnInitialized += () =>
@@ -112,11 +95,8 @@
             var geozonePoints = GetGeozonePoints(gPoints);
 
             Polygon _polyline = new Polygon { Shape = geozonePoints, DrawStroke= true, Fill=true, FillColor = Color.Blue };
-
-            _geozones = new Group { Objects = new Polygon[] { _polyline } };
-            _mapControl.AddLayer(_geozones);
-            //_mapControl.AddLayer(_polyline);            
-
+            _geozones = new Group { Polygons = new Polygon[] { _polyline } };
+            
             var area = Area.GetOuterArea(gPoints);
             if (area != null)
             {
@@ -127,8 +107,11 @@
                 Console.WriteLine(newCenterLon);
                 _marker = new Marker((float)newCenterLat, (float)newCenterLon);
                 _marker.Icon = new Icon() { Html = "geozone name" };
-                _mapControl.AddLayer(_marker);
+                
+                _geozones.Markers = new Marker[] { _marker };
             }
+
+            _mapControl.AddLayer(_geozones);
 
             // Create the marker
             var marker = new Marker(59.948080f, 30.326621f);            
@@ -171,5 +154,21 @@
         return points;
     }
 
+    private void GeozoneVisibility(float zoom)
+    {
+        if (zoom < 12)
+        {
+            //не отображаем геозоны                
+            _mapControl.RemoveLayer(_geozones);
+        }
+        else
+        {
+            var elementsCount = _mapControl.GetLayers().Where(p => p.Id == _geozones.Id).Count();
+            if (elementsCount == 0)
+            {
+                _mapControl.AddLayer(_geozones);
+            }
+        }
+    }
     
 }
