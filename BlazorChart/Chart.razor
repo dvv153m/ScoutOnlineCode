@@ -1,0 +1,19 @@
+﻿
+@using System.Threading.Tasks
+@using BlazorChart
+@using Microsoft.AspNetCore.Components
+@inject IJSRuntime JsRuntime
+
+<div id="chartdiv"></div>
+
+@code {
+ 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ChartInterop.Init(JsRuntime);            
+        }
+    }
+
+}

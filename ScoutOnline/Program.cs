@@ -44,12 +44,11 @@ namespace ScoutOnline
 
 //todo
 
+//табличка с фильтрацией
+//https://github.com/SveNord/Sve-Blazor-DataTable
+
 //Обновление приложения
 //https://wellsb.com/csharp/aspnet/create-pwa-from-blazor-app/
-
-//https://leafletjs.com/examples/layers-control/example.html
-//все геозоны с подписями размещать в L.layerGroup
-// группы для геозон и для отображения тс
 
 //pwa with version
 //https://wellsb.com/csharp/aspnet/create-pwa-from-blazor-app/

@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BlazorChart\BlazorChart.csproj" />
     <ProjectReference Include="..\BlazorLeaflet\BlazorLeaflet.csproj" />    
   </ItemGroup>
 
