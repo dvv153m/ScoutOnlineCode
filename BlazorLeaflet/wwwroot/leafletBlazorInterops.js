@@ -1,9 +1,9 @@
 ﻿maps = {};
 layers = {};
-//mapId = "";
+
 currentLayer = null;
 const LayerType = Object.freeze({ "Unknown": 0, "Polygon": 1, "Marker": 2 })
-const ProjectionType = Object.freeze({ "EPSG3857": 0, "EPSG3395": 1 })
+const ProjectionType = Object.freeze({ "EPSG3395": 0, "EPSG3857": 1 })
 
 window.leafletBlazor = {
     create: function (map, objectReference) {
@@ -21,18 +21,11 @@ window.leafletBlazor = {
         maps[map.id] = leafletMap;
         layers[map.id] = [];
     },
+
     addTilelayer: function (mapId, tileLayer, objectReference) {
 
-        var crsProjection = {};
-        if (tileLayer.projection == ProjectionType.EPSG3857) {
-
-            crsProjection = L.CRS.EPSG3857;
-        }
-        else if (tileLayer.projection == ProjectionType.EPSG3395) {
-
-            crsProjection = L.CRS.EPSG3395;
-        }
-        maps[mapId].crs = crsProjection;
+        var crsProjection = getLeafletProjection(tileLayer.projection);        
+        maps[mapId].options.crs = crsProjection;        
 
         const layer = L.tileLayer(tileLayer.urlTemplate, {
             attribution: tileLayer.attribution,
@@ -436,6 +429,7 @@ function addLayer(mapId, layer, layerId) {
 // #region events
 
 // removes properties that can cause circular references
+
 function cleanupEventArgsForSerialization(eventArgs) {
 
     const propertiesToRemove = [
@@ -536,6 +530,41 @@ function connectInteractionEvents(interactiveObject, objectReference) {
         "mouseout": "NotifyMouseOut",
         "contextmenu": "NotifyContextMenu",
     });
+}
+
+function getLeafletProjection(projection) {
+
+    var crsProjection = {};
+    if (projection == ProjectionType.EPSG3395) {
+
+        crsProjection = L.CRS.EPSG3395;
+    }
+    else if (projection == ProjectionType.EPSG3857) {
+
+        crsProjection = L.CRS.EPSG3857;
+    }
+    else if (projection == ProjectionType.EPSG4326) {
+
+        crsProjection = L.CRS.EPSG4326;
+    }
+    else if (projection == ProjectionType.Earth) {
+
+        crsProjection = L.CRS.Earth;
+    }
+    else if (projection == ProjectionType.Simple) {
+
+        crsProjection = L.CRS.Simple;
+    }
+    else if (projection == ProjectionType.Base) {
+
+        crsProjection = L.CRS.Base;
+    }
+    else {
+
+        crsProjection = L.CRS.EPSG3395;
+    }
+
+    return crsProjection;
 }
 
 // #endregion
