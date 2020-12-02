@@ -4,11 +4,12 @@
 @using Microsoft.AspNetCore.Components
 @inject IJSRuntime JsRuntime
 
-<div id="@Id"></div>
+<div id="@Id" class="@Class"></div>
 
 @code {
 
     [Parameter] public string Id { get; set; }
+    [Parameter] public string Class { get; set; }
  
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

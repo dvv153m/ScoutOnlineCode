@@ -231,15 +231,7 @@ app {
     /* Use color, background, set margins for offset, etc */
 }
 
-#chartdiv {
-    width: 100%;
-    height: 500px;
-}
-#chartdiv2 {
-    width: 100%;
-    height: 500px;
-}
-#chartdiv3 {
+.chartdiv {
     width: 100%;
     height: 500px;
 }
