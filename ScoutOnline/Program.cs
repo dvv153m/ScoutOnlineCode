@@ -42,7 +42,7 @@ namespace ScoutOnline
     }
 }
 
-//todo
+//todo//
 
 //табличка с фильтрацией
 //https://github.com/SveNord/Sve-Blazor-DataTable
