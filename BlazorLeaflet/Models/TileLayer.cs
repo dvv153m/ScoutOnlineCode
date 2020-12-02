@@ -2,7 +2,6 @@
 {
     public class TileLayer : GridLayer
     {
-
         /// <summary>
         /// Instantiates a tile layer object given a URL template.
         /// </summary>
@@ -43,5 +42,6 @@
         /// </summary>
         public bool DetectRetina { get; set; }
 
+        public MapProjection Projection { get; set; }
     }
 }

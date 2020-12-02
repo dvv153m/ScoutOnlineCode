@@ -2,17 +2,19 @@
 layers = {};
 //mapId = "";
 currentLayer = null;
-const LayerType = Object.freeze({ "Unknown": 0, "Polygon": 1, "Marker": 2})
+const LayerType = Object.freeze({ "Unknown": 0, "Polygon": 1, "Marker": 2 })
+const ProjectionType = Object.freeze({ "EPSG3857": 0, "EPSG3395": 1 })
 
 window.leafletBlazor = {
     create: function (map, objectReference) {
+
         var leafletMap = L.map(map.id, {
             center: map.center,
             zoom: map.zoom,
             zoomControl: map.zoomControl,
             minZoom: map.minZoom ? map.minZoom : undefined,
             maxZoom: map.maxZoom ? map.maxZoom : undefined,
-            maxBounds: map.maxBounds && map.maxBounds.item1 && map.maxBounds.item2 ? L.latLngBounds(map.maxBounds.item1, map.maxBounds.item2) : undefined,
+            maxBounds: map.maxBounds && map.maxBounds.item1 && map.maxBounds.item2 ? L.latLngBounds(map.maxBounds.item1, map.maxBounds.item2) : undefined            
         });
         
         connectMapEvents(leafletMap, objectReference);
@@ -20,6 +22,18 @@ window.leafletBlazor = {
         layers[map.id] = [];
     },
     addTilelayer: function (mapId, tileLayer, objectReference) {
+
+        var crsProjection = {};
+        if (tileLayer.projection == ProjectionType.EPSG3857) {
+
+            crsProjection = L.CRS.EPSG3857;
+        }
+        else if (tileLayer.projection == ProjectionType.EPSG3395) {
+
+            crsProjection = L.CRS.EPSG3395;
+        }
+        maps[mapId].crs = crsProjection;
+
         const layer = L.tileLayer(tileLayer.urlTemplate, {
             attribution: tileLayer.attribution,
             pane: tileLayer.pane,
