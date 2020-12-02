@@ -3,7 +3,7 @@
 
 window.chartBlazor = {
     
-    init: function () {
+    init: function (idChart) {
         
         am4core.ready(function () {
 
@@ -13,7 +13,7 @@ window.chartBlazor = {
             // Themes end
 
             // Create chart instance
-            var chart = am4core.create("chartdiv", am4charts.XYChart);
+            var chart = am4core.create(idChart, am4charts.XYChart);            
 
             // Add data
             chart.data = generateChartData();

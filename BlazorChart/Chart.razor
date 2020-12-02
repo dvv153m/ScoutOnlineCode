@@ -4,15 +4,17 @@
 @using Microsoft.AspNetCore.Components
 @inject IJSRuntime JsRuntime
 
-<div id="chartdiv"></div>
+<div id="@Id"></div>
 
 @code {
+
+    [Parameter] public string Id { get; set; }
  
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await ChartInterop.Init(JsRuntime);            
+            await ChartInterop.Init(JsRuntime, Id);
         }
     }
 

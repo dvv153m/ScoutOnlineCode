@@ -5,9 +5,9 @@ namespace BlazorChart
 {
     public class ChartInterop
     {        
-        public static ValueTask Init(IJSRuntime jsRuntime)
+        public static ValueTask Init(IJSRuntime jsRuntime, string id)
         {
-            return jsRuntime.InvokeVoidAsync("chartBlazor.init");
+            return jsRuntime.InvokeVoidAsync("chartBlazor.init", id);
         }
     }
 }
