@@ -1,21 +1,28 @@
 ﻿
 @using System.Threading.Tasks
 @using BlazorChart
+@using BlazorChart.Models
 @using Microsoft.AspNetCore.Components
 @inject IJSRuntime JsRuntime
 
-<div id="@Id" class="@Class"></div>
+@foreach(var t in Charts)
+{
+    <div id="@t.Id" class="@Class"></div>
+}
 
 @code {
-
     [Parameter] public string Id { get; set; }
     [Parameter] public string Class { get; set; }
+    [Parameter] public ChartModel[] Charts { get; set; }
  
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await ChartInterop.Init(JsRuntime, Id);
+            foreach (var t in Charts)
+            {
+                await ChartInterop.Init(JsRuntime, t.Id);
+            }
         }
     }
 

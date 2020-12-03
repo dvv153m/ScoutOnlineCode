@@ -44,6 +44,13 @@ namespace ScoutOnline
 
 //todo//
 
+//графики
+//https://www.amcharts.com/demos/line-graph/
+//https://www.amcharts.com/docs/v4/tutorials/plugin-range-selector/
+//https://www.amcharts.com/docs/v4/tutorials/zooming-axis-via-api-or-external-scrollbar/
+//https://www.amcharts.com/docs/v4/tutorials/configuring-the-zoom-out-button/
+//https://www.amcharts.com/docs/v4/tutorials/3d-line-series/
+
 //табличка с фильтрацией
 //https://github.com/SveNord/Sve-Blazor-DataTable
 
