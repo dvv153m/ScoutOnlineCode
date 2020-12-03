@@ -13,16 +13,13 @@
 @code {
     [Parameter] public string Id { get; set; }
     [Parameter] public string Class { get; set; }
-    [Parameter] public ChartModel[] Charts { get; set; }
+    [Parameter] public BlazorChart.Models.ChartModel[] Charts { get; set; }
  
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            foreach (var t in Charts)
-            {
-                await ChartInterop.Init(JsRuntime, t.Id);
-            }
+            await ChartInterop.Init(JsRuntime, Charts);            
         }
     }
 
