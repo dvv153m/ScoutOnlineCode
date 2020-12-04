@@ -8,13 +8,18 @@ namespace BlazorChart.Models
     {
         public ChartModel[] ChartModels { get; set; }
 
-        public ChartControl()
+        public ChartControl(int count)
         {
-            ChartModels = new ChartModel[2]
+            ChartModels = new ChartModel[count];
+            for (int i = 0; i < count; i++)
+            {
+                ChartModels[i] = new ChartModel { Id = $"chartdiv{i}" };
+            }
+            /*ChartModels = new ChartModel[2]
             {
                 new ChartModel{ Id="chartdiv1"},
                 new ChartModel{ Id="chartdiv2"}
-            };
+            };*/
         }
     }
 }

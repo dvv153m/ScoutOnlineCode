@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScoutOnline", "ScoutOnline\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorLeaflet", "BlazorLeaflet\BlazorLeaflet.csproj", "{ACFC86C4-9E3D-4D00-B4FD-4DC98E9E7CE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorChart", "BlazorChart\BlazorChart.csproj", "{5F0E95C8-DA6B-4922-8517-522819536706}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorChart", "BlazorChart\BlazorChart.csproj", "{5F0E95C8-DA6B-4922-8517-522819536706}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,7 +1,6 @@
-﻿@page "/chart"
+﻿@page "/chart5"
 
 <h3>Chart 100K points</h3>
-
 
 <BlazorChart.Chart Class="chartdiv" Charts="_chartControl.ChartModels"></BlazorChart.Chart>
 
@@ -18,7 +17,7 @@
 
     protected override void OnInitialized()
     {
-        _chartControl = new ChartControl(2);
+        _chartControl = new ChartControl(5);
     }
 
 }
