@@ -35,7 +35,7 @@ window.chartBlazor = {
                 var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
                 dateAxis.renderer.minGridDistance = 50;
                 dateAxis.groupData = true;
-                dateAxis.groupCount = 200;
+                dateAxis.groupCount = 1000;
                 //подписка на изменение масштаба и скрол графика
                 dateAxis.events.on("startendchanged", dateAxisChanged);
                 function dateAxisChanged(ev) {
@@ -51,17 +51,15 @@ window.chartBlazor = {
 
                 // Create series
                 var series = chart.series.push(new am4charts.LineSeries());
-                series.minBulletDistance = 10;
+                series.minBulletDistance = 20;
                 series.dataFields.valueY = "visits";
                 series.dataFields.dateX = "date";
-                series.strokeWidth = 2;
-                series.minBulletDistance = 10;
+                series.strokeWidth = 2;                
                 series.tooltipText = "{valueY}";
                 series.tooltip.pointerOrientation = "vertical";
                 series.tooltip.background.cornerRadius = 20;
                 //series.tooltip.background.fillOpacity = 0.5;
-                series.tooltip.label.padding(12, 12, 12, 12);
-                series.minBulletDistance = 5;
+                series.tooltip.label.padding(12, 12, 12, 12);                
 
                 //рисование точек на графике
                 var bullet = series.bullets.push(new am4charts.CircleBullet());
@@ -91,7 +89,7 @@ function generateChartData() {
     var firstDate = new Date();
     firstDate.setDate(firstDate.getDate());//-1000
     var visits = 1200;
-    for (var i = 0; i < 2000; i++) {
+    for (var i = 0; i < 10000; i++) {
         // we create date objects here. In your data, you can have date strings
         // and then set format of your dates using chart.dataDateFormat property,
         // however when possible, use date objects, as this will speed up chart rendering.
