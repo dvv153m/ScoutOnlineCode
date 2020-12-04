@@ -106,7 +106,7 @@
                 Console.WriteLine(newCenterLat);
                 Console.WriteLine(newCenterLon);
                 _marker = new Marker((float)newCenterLat, (float)newCenterLon);
-                _marker.Icon = new Icon() { Html = "geozone name" };
+                _marker.Icon = new Icon() { Html = "Geozone name" };
                 
                 _geozones.Markers = new Marker[] { _marker };
             }
@@ -114,7 +114,7 @@
             _mapControl.AddLayer(_geozones);
 
             // Create the marker
-            var marker = new Marker(59.948080f, 30.326621f);            
+            var marker = new Marker(59.960000f, 30.326621f);            
             marker.Popup = new Popup { Content = "This is a nice location!" };
             marker.Icon = new Icon { Url = "camping.png" };
             _mapControl.AddLayer(marker);
