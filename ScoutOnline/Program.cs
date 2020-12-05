@@ -50,7 +50,10 @@ namespace ScoutOnline
 //https://www.amcharts.com/docs/v4/tutorials/zooming-axis-via-api-or-external-scrollbar/
 //https://www.amcharts.com/docs/v4/tutorials/configuring-the-zoom-out-button/
 //https://www.amcharts.com/docs/v4/tutorials/3d-line-series/
+
 //https://www.amcharts.com/docs/v4/concepts/performance/
+//https://www.amcharts.com/docs/v4/tutorials/stacked-axes/            несколько графиков в одном контроле
+//https://www.amcharts.com/docs/v4/concepts/axes/date-axis/#Dynamic_data_item_grouping  подробно про группировку
 
 //табличка с фильтрацией
 //https://github.com/SveNord/Sve-Blazor-DataTable

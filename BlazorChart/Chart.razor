@@ -5,21 +5,24 @@
 @using Microsoft.AspNetCore.Components
 @inject IJSRuntime JsRuntime
 
-@foreach(var t in Charts)
+@foreach(var t in ChartControl.ChartModels)
 {
     <div id="@t.Id" class="@Class"></div>
 }
 
 @code {
-    [Parameter] public string Id { get; set; }
+    //[Parameter] public string Id { get; set; }
     [Parameter] public string Class { get; set; }
-    [Parameter] public BlazorChart.Models.ChartModel[] Charts { get; set; }
+    //[Parameter] public BlazorChart.Models.ChartModel[] Charts { get; set; }
+    [Parameter] public BlazorChart.Models.ChartControl ChartControl { get; set; }
  
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        //if (firstRender)
+        if(ChartControl.CountPoints > 9)
         {
-            await ChartInterop.Init(JsRuntime, Charts);            
+            await ChartInterop.Init(JsRuntime, ChartControl);            
+            //await ChartInterop.Init(JsRuntime, Charts);            
         }
     }
 

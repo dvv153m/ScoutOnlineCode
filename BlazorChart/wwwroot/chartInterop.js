@@ -2,13 +2,15 @@
 // wrapped in a .NET API
 
 charts = [];
+countGPoints = 0;
 
 window.chartBlazor = {
     
-    init: function (chartModelsJson) {
+    init: function (countPoints, chartModelsJson) {
 
         charts = [];
-        
+        countGPoints = countPoints;
+
         am4core.ready(function () {
 
             // Themes begin
@@ -35,7 +37,7 @@ window.chartBlazor = {
                 var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
                 dateAxis.renderer.minGridDistance = 50;
                 dateAxis.groupData = true;
-                dateAxis.groupCount = 2000;
+                dateAxis.groupCount = 8000;
                 //подписка на изменение масштаба и скрол графика
                 dateAxis.events.on("startendchanged", dateAxisChanged);
                 function dateAxisChanged(ev) {
@@ -89,7 +91,7 @@ function generateChartData() {
     var firstDate = new Date();
     firstDate.setDate(firstDate.getDate());//-1000
     var visits = 1200;
-    for (var i = 0; i < 100000; i++) {
+    for (var i = 0; i < countGPoints; i++) {
         // we create date objects here. In your data, you can have date strings
         // and then set format of your dates using chart.dataDateFormat property,
         // however when possible, use date objects, as this will speed up chart rendering.

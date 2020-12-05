@@ -1,9 +1,12 @@
 ﻿@page "/chart"
 
-<h3>Chart 100K points</h3>
+<h3>Chart v1</h3>
+<p>Кол-во точек:</p>
+<input type="number" id="tentacles" name="tentacles" @bind="currentCountPoinst"
+       min="10" max="1000000">
+<button class="btn btn-primary" @onclick="Apply">Применить</button>
 
-
-<BlazorChart.Chart Class="chartdiv" Charts="_chartControl.ChartModels"></BlazorChart.Chart>
+<BlazorChart.Chart Class="chartdiv" ChartControl="_chartControl"></BlazorChart.Chart>
 
 <!--<BlazorChart.Chart Id="chartdiv1" Class="chartdiv"></BlazorChart.Chart>
 
@@ -13,12 +16,17 @@
 
 
 @code {
-
-    ChartControl _chartControl;
+    ChartControl _chartControl = null;
+    private int currentCountPoinst = 10000;
 
     protected override void OnInitialized()
     {
-        _chartControl = new ChartControl(2);
+        _chartControl = new ChartControl(5, 2);
+    }
+
+    private void Apply()
+    {        
+        _chartControl = new ChartControl(currentCountPoinst, 2);
     }
 
 }
