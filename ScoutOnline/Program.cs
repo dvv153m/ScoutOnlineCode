@@ -54,6 +54,9 @@ namespace ScoutOnline
 //https://www.amcharts.com/docs/v4/concepts/performance/
 //https://www.amcharts.com/docs/v4/tutorials/stacked-axes/            несколько графиков в одном контроле
 //https://www.amcharts.com/docs/v4/concepts/axes/date-axis/#Dynamic_data_item_grouping  подробно про группировку
+//https://www.amcharts.com/docs/v4/tutorials/zooming-axis-via-api-or-external-scrollbar/
+//https://www.amcharts.com/docs/v4/concepts/chart-cursor/
+//https://www.amcharts.com/demos/line-chart-with-range-slider/?theme=dataviz
 
 //табличка с фильтрацией
 //https://github.com/SveNord/Sve-Blazor-DataTable

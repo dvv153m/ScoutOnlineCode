@@ -35,9 +35,9 @@ window.chartBlazor = {
 
                 // Create axes
                 var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-                dateAxis.renderer.minGridDistance = 50;
+                //dateAxis.renderer.minGridDistance = 50;
                 dateAxis.groupData = true;
-                dateAxis.groupCount = 8000;
+                dateAxis.groupCount = 1000;
                 //подписка на изменение масштаба и скрол графика
                 dateAxis.events.on("startendchanged", dateAxisChanged);
                 function dateAxisChanged(ev) {
@@ -53,7 +53,7 @@ window.chartBlazor = {
 
                 // Create series
                 var series = chart.series.push(new am4charts.LineSeries());
-                series.minBulletDistance = 20;
+                series.minBulletDistance = 15;
                 series.dataFields.valueY = "visits";
                 series.dataFields.dateX = "date";
                 series.strokeWidth = 2;                
